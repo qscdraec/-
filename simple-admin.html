@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة Variteks-Algérie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .login-section, .admin-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Login Styles */
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .form-group input:focus {
+            border-color: #3b82f6;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 14px;
+        }
+        
+        .success {
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 14px;
+        }
+        
+        /* Admin Panel Styles */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .user-info {
+            background: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid;
+        }
+        
+        .stat-card.green { border-left-color: #228B22; }
+        .stat-card.blue { border-left-color: #3b82f6; }
+        .stat-card.yellow { border-left-color: #f59e0b; }
+        .stat-card.purple { border-left-color: #8b5cf6; }
+        
+        .stat-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .demo-info {
+            background: linear-gradient(90deg, rgba(34,139,34,0.1) 0%, rgba(255,215,0,0.1) 50%, rgba(220,20,60,0.1) 100%);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div id="loginSection" class="login-section">
+            <div class="login-header">
+                <div class="logo">V</div>
+                <h1 class="title">لوحة تحكم Variteks-Algérie</h1>
+                <p>تسجيل الدخول للمشرفين والمديرين فقط</p>
+            </div>
+
+            <div id="message"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">اسم المستخدم</label>
+                    <input type="text" id="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" required>
+                </div>
+
+                <button type="submit" class="btn">تسجيل الدخول</button>
+            </form>
+
+            <div class="demo-info">
+                <strong>بيانات تجريبية:</strong><br>
+                مدير النظام: admin / admin123<br>
+                مشرف المتجر: manager / manager123
+            </div>
+        </div>
+
+        <!-- Admin Panel Section -->
+        <div id="adminSection" class="admin-section hidden">
+            <div class="admin-header">
+                <div>
+                    <div class="logo" style="width: 40px; height: 40px; font-size: 16px; display: inline-flex; margin-left: 1rem;">V</div>
+                    <span class="title" style="font-size: 20px;">لوحة تحكم المشرف</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="user-info">
+                        <strong id="currentUser"></strong> (<span id="currentRole"></span>)
+                    </div>
+                    <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card green">
+                    <div class="stat-title">إجمالي المبيعات</div>
+                    <div class="stat-value" style="color: #228B22;">549,900 دج</div>
+                    <div style="font-size: 12px; color: #059669;">+12.5%</div>
+                </div>
+                
+                <div class="stat-card blue">
+                    <div class="stat-title">إجمالي الطلبات</div>
+                    <div class="stat-value" style="color: #3b82f6;">156</div>
+                    <div style="font-size: 12px; color: #059669;">+8.2%</div>
+                </div>
+                
+                <div class="stat-card yellow">
+                    <div class="stat-title">المنتجات</div>
+                    <div class="stat-value" style="color: #f59e0b;">89</div>
+                    <div style="font-size: 12px; color: #6b7280;">3 مخزون منخفض</div>
+                </div>
+                
+                <div class="stat-card purple">
+                    <div class="stat-title">العملاء</div>
+                    <div class="stat-value" style="color: #8b5cf6;">1,234</div>
+                    <div style="font-size: 12px; color: #059669;">+5.1%</div>
+                </div>
+            </div>
+
+            <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px;">
+                <h3 style="margin-bottom: 1rem; color: #1f2937;">الطلبات الأخيرة</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #e5e7eb;">
+                            <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">رقم الطلب</th>
+                            <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">العميل</th>
+                            <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">المبلغ</th>
+                            <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #f3f4f6;">
+                            <td style="padding: 0.75rem; font-weight: 500;">#001</td>
+                            <td style="padding: 0.75rem;">أحمد محمد</td>
+                            <td style="padding: 0.75rem; font-weight: 500;">429,900 دج</td>
+                            <td style="padding: 0.75rem;"><span style="background: #fef3c7; color: #92400e; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 12px;">معلق</span></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f3f4f6;">
+                            <td style="padding: 0.75rem; font-weight: 500;">#002</td>
+                            <td style="padding: 0.75rem;">فاطمة علي</td>
+                            <td style="padding: 0.75rem; font-weight: 500;">120,000 دج</td>
+                            <td style="padding: 0.75rem;"><span style="background: #dcfce7; color: #166534; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 12px;">مكتمل</span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; font-weight: 500;">#003</td>
+                            <td style="padding: 0.75rem;">محمد حسن</td>
+                            <td style="padding: 0.75rem; font-weight: 500;">89,900 دج</td>
+                            <td style="padding: 0.75rem;"><span style="background: #dbeafe; color: #1e40af; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 12px;">قيد الشحن</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- إدارة المنتجات -->
+            <div style="background: white; padding: 1.5rem; border-radius: 12px; margin-top: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="color: #1f2937; margin: 0;">إدارة المنتجات</h3>
+                    <button onclick="showAddProductForm()" class="btn" style="width: auto; padding: 0.5rem 1rem; font-size: 14px;">
+                        إضافة منتج جديد
+                    </button>
+                </div>
+
+                <!-- نموذج إضافة منتج -->
+                <div id="addProductForm" class="hidden" style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <h4 style="margin-bottom: 1rem; color: #374151;">إضافة منتج جديد</h4>
+                    <form id="productForm">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">اسم المنتج</label>
+                                <input type="text" id="productName" required style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">السعر (دج)</label>
+                                <input type="number" id="productPrice" required style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">الفئة</label>
+                                <select id="productCategory" required style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px;">
+                                    <option value="">اختر الفئة</option>
+                                    <option value="إلكترونيات">إلكترونيات</option>
+                                    <option value="ملابس">ملابس</option>
+                                    <option value="إكسسوارات">إكسسوارات</option>
+                                    <option value="منزل وحديقة">منزل وحديقة</option>
+                                    <option value="رياضة">رياضة</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">المخزون</label>
+                                <input type="number" id="productStock" required style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px;">
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">رابط الصورة</label>
+                            <input type="url" id="productImage" placeholder="https://example.com/image.jpg" style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px;">
+                        </div>
+
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151;">الوصف</label>
+                            <textarea id="productDescription" rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; resize: vertical;"></textarea>
+                        </div>
+
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="productFeatured">
+                                <span style="font-weight: 500; color: #374151;">منتج مميز (يظهر في الصفحة الرئيسية)</span>
+                            </label>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn" style="width: auto; padding: 0.5rem 1rem; font-size: 14px;">
+                                إضافة المنتج
+                            </button>
+                            <button type="button" onclick="hideAddProductForm()" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- قائمة المنتجات -->
+                <div id="productsList"></div>
+            </div>
+
+            <div id="adminOnly" class="hidden" style="margin-top: 1rem;">
+                <div style="background: #dcfce7; color: #166534; padding: 1rem; border-radius: 8px; text-align: center;">
+                    ✅ مرحباً مدير النظام! لديك صلاحيات كاملة لإدارة جميع أقسام المتجر
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        // نظام إدارة المنتجات المشترك
+        class StoreManager {
+            constructor() {
+                this.products = this.loadProducts();
+                this.orders = this.loadOrders();
+            }
+
+            // تحميل المنتجات من localStorage
+            loadProducts() {
+                const saved = localStorage.getItem('variteks_products');
+                if (saved) {
+                    return JSON.parse(saved);
+                }
+
+                // منتجات افتراضية
+                return [
+                    {
+                        id: 1,
+                        name: "آيفون 15 برو ماكس 256 جيجا",
+                        price: 429900,
+                        image: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&q=80",
+                        category: "إلكترونيات",
+                        stock: 25,
+                        description: "أحدث هواتف آيفون بتقنية متطورة وكاميرا احترافية",
+                        featured: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        name: "لابتوب Dell XPS 13",
+                        price: 289900,
+                        image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80",
+                        category: "إلكترونيات",
+                        stock: 15,
+                        description: "لابتوب عالي الأداء مثالي للعمل والدراسة",
+                        featured: true,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 3,
+                        name: "ساعة ذكية Apple Watch",
+                        price: 89900,
+                        image: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400&q=80",
+                        category: "إكسسوارات",
+                        stock: 30,
+                        description: "ساعة ذكية متطورة لتتبع الصحة واللياقة",
+                        featured: false,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+            }
+
+            // تحميل الطلبات من localStorage
+            loadOrders() {
+                const saved = localStorage.getItem('variteks_orders');
+                if (saved) {
+                    return JSON.parse(saved);
+                }
+
+                return [
+                    { id: 1, customer: 'أحمد محمد', total: 429900, status: 'معلق', date: new Date().toISOString() },
+                    { id: 2, customer: 'فاطمة علي', total: 120000, status: 'مكتمل', date: new Date().toISOString() },
+                    { id: 3, customer: 'محمد حسن', total: 89900, status: 'قيد الشحن', date: new Date().toISOString() }
+                ];
+            }
+
+            // حفظ المنتجات
+            saveProducts() {
+                localStorage.setItem('variteks_products', JSON.stringify(this.products));
+                this.notifyStoreUpdate();
+            }
+
+            // حفظ الطلبات
+            saveOrders() {
+                localStorage.setItem('variteks_orders', JSON.stringify(this.orders));
+            }
+
+            // إضافة منتج جديد
+            addProduct(product) {
+                const newProduct = {
+                    ...product,
+                    id: Date.now(),
+                    createdAt: new Date().toISOString()
+                };
+                this.products.unshift(newProduct);
+                this.saveProducts();
+                return newProduct;
+            }
+
+            // تحديث منتج
+            updateProduct(id, updates) {
+                const index = this.products.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    this.products[index] = { ...this.products[index], ...updates };
+                    this.saveProducts();
+                    return this.products[index];
+                }
+                return null;
+            }
+
+            // حذف منتج
+            deleteProduct(id) {
+                this.products = this.products.filter(p => p.id !== id);
+                this.saveProducts();
+            }
+
+            // إشعار المتجر بالتحديث
+            notifyStoreUpdate() {
+                // إرسال حدث مخصص لإشعار المتجر
+                window.dispatchEvent(new CustomEvent('storeProductsUpdated', {
+                    detail: { products: this.products }
+                }));
+            }
+
+            // الحصول على الإحصائيات
+            getStats() {
+                const totalProducts = this.products.length;
+                const totalRevenue = this.orders
+                    .filter(o => o.status === 'مكتمل')
+                    .reduce((sum, o) => sum + o.total, 0);
+                const totalOrders = this.orders.length;
+                const lowStockProducts = this.products.filter(p => p.stock < 10).length;
+
+                return {
+                    totalProducts,
+                    totalRevenue,
+                    totalOrders,
+                    lowStockProducts
+                };
+            }
+        }
+
+        // إنشاء مدير المتجر العام
+        const storeManager = new StoreManager();
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            // Clear previous messages
+            messageDiv.innerHTML = '';
+            
+            // Check credentials
+            if ((username === 'admin' && password === 'admin123') || 
+                (username === 'manager' && password === 'manager123')) {
+                
+                // Set current user
+                currentUser = {
+                    username: username,
+                    role: username === 'admin' ? 'admin' : 'manager'
+                };
+                
+                // Show success message
+                messageDiv.innerHTML = '<div class="success">تم تسجيل الدخول بنجاح!</div>';
+                
+                // Show admin panel after short delay
+                setTimeout(() => {
+                    showAdminPanel();
+                }, 1000);
+                
+            } else {
+                messageDiv.innerHTML = '<div class="error">اسم المستخدم أو كلمة المرور غير صحيحة</div>';
+            }
+        });
+
+        // Show admin panel
+        function showAdminPanel() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.remove('hidden');
+
+            // Update user info
+            document.getElementById('currentUser').textContent = currentUser.username;
+            document.getElementById('currentRole').textContent =
+                currentUser.role === 'admin' ? 'مدير النظام' : 'مشرف المتجر';
+
+            // Show admin-only content
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminOnly').classList.remove('hidden');
+            }
+
+            // تحديث الإحصائيات والمنتجات
+            updateStats();
+            updateProductsList();
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            const stats = storeManager.getStats();
+
+            // تحديث قيم الإحصائيات
+            document.querySelector('.stat-card.green .stat-value').textContent =
+                stats.totalRevenue.toLocaleString() + ' دج';
+            document.querySelector('.stat-card.blue .stat-value').textContent =
+                stats.totalOrders.toString();
+            document.querySelector('.stat-card.yellow .stat-value').textContent =
+                stats.totalProducts.toString();
+            document.querySelector('.stat-card.yellow div:last-child').textContent =
+                stats.lowStockProducts + ' مخزون منخفض';
+        }
+
+        // تحديث قائمة المنتجات
+        function updateProductsList() {
+            const container = document.getElementById('productsList');
+            const products = storeManager.products;
+
+            if (products.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">لا توجد منتجات حالياً</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">الصورة</th>
+                                <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">اسم المنتج</th>
+                                <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">السعر</th>
+                                <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">الفئة</th>
+                                <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">المخزون</th>
+                                <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">الحالة</th>
+                                <th style="padding: 0.75rem; text-align: right; font-size: 14px; color: #6b7280;">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${products.map(product => `
+                                <tr style="border-bottom: 1px solid #f3f4f6;">
+                                    <td style="padding: 0.75rem;">
+                                        <img src="${product.image || 'https://via.placeholder.com/50'}"
+                                             alt="${product.name}"
+                                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;"
+                                             onerror="this.src='https://via.placeholder.com/50'">
+                                    </td>
+                                    <td style="padding: 0.75rem; font-weight: 500;">${product.name}</td>
+                                    <td style="padding: 0.75rem; font-weight: 500;">${product.price.toLocaleString()} دج</td>
+                                    <td style="padding: 0.75rem;">${product.category}</td>
+                                    <td style="padding: 0.75rem;">
+                                        <span style="color: ${product.stock < 10 ? '#dc2626' : '#059669'};">
+                                            ${product.stock}
+                                        </span>
+                                    </td>
+                                    <td style="padding: 0.75rem;">
+                                        ${product.featured ?
+                                            '<span style="background: #dcfce7; color: #166534; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 12px;">مميز</span>' :
+                                            '<span style="background: #f3f4f6; color: #6b7280; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 12px;">عادي</span>'
+                                        }
+                                    </td>
+                                    <td style="padding: 0.75rem;">
+                                        <button onclick="deleteProduct(${product.id})"
+                                                style="background: #dc2626; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                            حذف
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // إظهار نموذج إضافة منتج
+        function showAddProductForm() {
+            document.getElementById('addProductForm').classList.remove('hidden');
+        }
+
+        // إخفاء نموذج إضافة منتج
+        function hideAddProductForm() {
+            document.getElementById('addProductForm').classList.add('hidden');
+            document.getElementById('productForm').reset();
+        }
+
+        // حذف منتج
+        function deleteProduct(id) {
+            if (confirm('هل أنت متأكد من حذف هذا المنتج؟')) {
+                storeManager.deleteProduct(id);
+                updateProductsList();
+                updateStats();
+            }
+        }
+
+        // معالج نموذج إضافة المنتج
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const product = {
+                name: document.getElementById('productName').value,
+                price: parseInt(document.getElementById('productPrice').value),
+                category: document.getElementById('productCategory').value,
+                stock: parseInt(document.getElementById('productStock').value),
+                image: document.getElementById('productImage').value || 'https://via.placeholder.com/400',
+                description: document.getElementById('productDescription').value,
+                featured: document.getElementById('productFeatured').checked
+            };
+
+            storeManager.addProduct(product);
+            updateProductsList();
+            updateStats();
+            hideAddProductForm();
+
+            // إظهار رسالة نجاح
+            const message = document.createElement('div');
+            message.className = 'success';
+            message.textContent = 'تم إضافة المنتج بنجاح! سيظهر في المتجر فوراً.';
+            message.style.position = 'fixed';
+            message.style.top = '20px';
+            message.style.right = '20px';
+            message.style.zIndex = '1000';
+            message.style.padding = '1rem';
+            message.style.borderRadius = '8px';
+            message.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+
+            document.body.appendChild(message);
+
+            setTimeout(() => {
+                document.body.removeChild(message);
+            }, 3000);
+        });
+
+        // Logout function
+        function logout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                currentUser = null;
+                document.getElementById('adminSection').classList.add('hidden');
+                document.getElementById('loginSection').classList.remove('hidden');
+                document.getElementById('adminOnly').classList.add('hidden');
+                document.getElementById('loginForm').reset();
+                document.getElementById('message').innerHTML = '';
+                hideAddProductForm();
+            }
+        }
+    </script>
+</body>
+</html>

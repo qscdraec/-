@@ -1,0 +1,38 @@
+{
+  "server": {
+    "name": "Variteks-Algérie Server",
+    "version": "2.0",
+    "description": "خادم متجر Variteks-Algérie للشبكة المحلية",
+    "default_port": 8000,
+    "auto_open_browser": true,
+    "cors_enabled": true
+  },
+  "network": {
+    "allow_external_access": true,
+    "bind_to_all_interfaces": true,
+    "max_connections": 100,
+    "timeout": 30
+  },
+  "security": {
+    "enable_basic_auth": false,
+    "allowed_ips": ["*"],
+    "rate_limiting": false
+  },
+  "features": {
+    "real_time_sync": true,
+    "multi_device_support": true,
+    "offline_mode": false,
+    "data_persistence": true
+  },
+  "paths": {
+    "admin_panel": "/",
+    "store": "/store",
+    "test_page": "/test",
+    "api_base": "/api"
+  },
+  "storage": {
+    "type": "localStorage",
+    "backup_enabled": true,
+    "sync_interval": 300
+  }
+}

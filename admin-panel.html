@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المشرف - Variteks-Algérie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+        
+        .header-subtitle {
+            color: #6b7280;
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-info {
+            background: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+        
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Tabs */
+        .tabs {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+        
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            color: white;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: #f3f4f6;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+        
+        .stat-card.green { border-left-color: #228B22; }
+        .stat-card.blue { border-left-color: #3b82f6; }
+        .stat-card.yellow { border-left-color: #f59e0b; }
+        .stat-card.purple { border-left-color: #8b5cf6; }
+        
+        .stat-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .stat-change {
+            font-size: 12px;
+            margin: 0;
+        }
+        
+        .stat-change.positive { color: #059669; }
+        .stat-change.neutral { color: #6b7280; }
+        
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th {
+            padding: 0.75rem;
+            text-align: right;
+            font-size: 14px;
+            color: #6b7280;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table td {
+            padding: 0.75rem;
+            font-size: 14px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-shipping {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .placeholder {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .placeholder h2 {
+            font-size: 24px;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .placeholder p {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 1rem;
+        }
+        
+        .admin-badge {
+            color: #059669;
+            font-size: 14px;
+            padding: 0.5rem;
+            background: #dcfce7;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .tab-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="logo">V</div>
+                <div>
+                    <h1 class="header-title">لوحة تحكم المشرف</h1>
+                    <p class="header-subtitle">إدارة شاملة لمتجر Variteks-Algérie</p>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="user-info">
+                    <strong id="username"></strong> (<span id="userRole"></span>)
+                </div>
+                <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showTab('dashboard')">لوحة المعلومات</button>
+                <button class="tab-btn" onclick="showTab('products')">المنتجات</button>
+                <button class="tab-btn" onclick="showTab('orders')">الطلبات</button>
+                <button class="tab-btn" onclick="showTab('customers')">العملاء</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card green">
+                    <h3 class="stat-title">إجمالي المبيعات</h3>
+                    <p class="stat-value" style="color: #228B22;">549,900 دج</p>
+                    <p class="stat-change positive">+12.5%</p>
+                </div>
+                
+                <div class="stat-card blue">
+                    <h3 class="stat-title">إجمالي الطلبات</h3>
+                    <p class="stat-value" style="color: #3b82f6;">156</p>
+                    <p class="stat-change positive">+8.2%</p>
+                </div>
+                
+                <div class="stat-card yellow">
+                    <h3 class="stat-title">المنتجات</h3>
+                    <p class="stat-value" style="color: #f59e0b;">89</p>
+                    <p class="stat-change neutral">3 مخزون منخفض</p>
+                </div>
+                
+                <div class="stat-card purple">
+                    <h3 class="stat-title">العملاء</h3>
+                    <p class="stat-value" style="color: #8b5cf6;">1,234</p>
+                    <p class="stat-change positive">+5.1%</p>
+                </div>
+            </div>
+
+            <!-- Recent Orders Table -->
+            <div class="table-container">
+                <h2 class="table-title">الطلبات الأخيرة</h2>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>رقم الطلب</th>
+                            <th>العميل</th>
+                            <th>المبلغ</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: 500;">#001</td>
+                            <td>أحمد محمد</td>
+                            <td style="font-weight: 500;">429,900 دج</td>
+                            <td><span class="status-badge status-pending">معلق</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">#002</td>
+                            <td>فاطمة علي</td>
+                            <td style="font-weight: 500;">120,000 دج</td>
+                            <td><span class="status-badge status-completed">مكتمل</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">#003</td>
+                            <td>محمد حسن</td>
+                            <td style="font-weight: 500;">89,900 دج</td>
+                            <td><span class="status-badge status-shipping">قيد الشحن</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">#004</td>
+                            <td>سارة أحمد</td>
+                            <td style="font-weight: 500;">67,500 دج</td>
+                            <td><span class="status-badge status-completed">مكتمل</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">#005</td>
+                            <td>يوسف محمود</td>
+                            <td style="font-weight: 500;">156,800 دج</td>
+                            <td><span class="status-badge status-pending">معلق</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Other Tabs -->
+        <div id="products" class="tab-content">
+            <div class="placeholder">
+                <h2>إدارة المنتجات</h2>
+                <p>هذا القسم قيد التطوير. سيتم إضافة المزيد من الميزات قريباً.</p>
+                <div id="adminOnlyProducts" style="display: none;">
+                    <div class="admin-badge">✅ لديك صلاحيات كاملة كمدير النظام</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="orders" class="tab-content">
+            <div class="placeholder">
+                <h2>إدارة الطلبات</h2>
+                <p>هذا القسم قيد التطوير. سيتم إضافة المزيد من الميزات قريباً.</p>
+                <div id="adminOnlyOrders" style="display: none;">
+                    <div class="admin-badge">✅ لديك صلاحيات كاملة كمدير النظام</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="customers" class="tab-content">
+            <div class="placeholder">
+                <h2>إدارة العملاء</h2>
+                <p>هذا القسم قيد التطوير. سيتم إضافة المزيد من الميزات قريباً.</p>
+                <div id="adminOnlyCustomers" style="display: none;">
+                    <div class="admin-badge">✅ لديك صلاحيات كاملة كمدير النظام</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Simple check if user is logged in (used by logout function)
+        function checkAuth() {
+            const user = localStorage.getItem('user');
+            if (!user) return null;
+            try {
+                return JSON.parse(user);
+            } catch (error) {
+                localStorage.removeItem('user');
+                return null;
+            }
+        }
+
+        // Initialize page
+        function init() {
+            console.log('Initializing page...'); // للتشخيص
+
+            // تأخير أطول للتأكد من حفظ البيانات
+            setTimeout(() => {
+                // محاولة متعددة للحصول على البيانات
+                let attempts = 0;
+                const maxAttempts = 5;
+
+                function tryGetUser() {
+                    attempts++;
+                    console.log(`Attempt ${attempts} to get user data`);
+
+                    const userStr = localStorage.getItem('user');
+                    console.log('Raw user data from localStorage:', userStr);
+
+                    if (userStr) {
+                        try {
+                            const user = JSON.parse(userStr);
+                            console.log('Successfully parsed user:', user);
+                            setupPage(user);
+                            return;
+                        } catch (error) {
+                            console.error('Error parsing user data:', error);
+                        }
+                    }
+
+                    if (attempts < maxAttempts) {
+                        console.log('User data not found, retrying in 200ms...');
+                        setTimeout(tryGetUser, 200);
+                    } else {
+                        console.log('Max attempts reached, redirecting to login');
+                        alert('لم يتم العثور على بيانات تسجيل الدخول. سيتم إعادة توجيهك إلى صفحة تسجيل الدخول.');
+                        setTimeout(() => {
+                            window.location.href = 'admin-login.html';
+                        }, 1000);
+                    }
+                }
+
+                tryGetUser();
+            }, 500);
+        }
+
+        // Setup page with user data
+        function setupPage(user) {
+            console.log('Setting up page for user:', user);
+
+            // Display user info
+            const usernameElement = document.getElementById('username');
+            const userRoleElement = document.getElementById('userRole');
+
+            if (usernameElement && userRoleElement) {
+                usernameElement.textContent = user.username;
+                userRoleElement.textContent =
+                    user.role === 'admin' ? 'مدير النظام' : 'مشرف المتجر';
+
+                console.log('User info displayed successfully');
+            } else {
+                console.error('Could not find username or userRole elements');
+            }
+
+            // Show admin-only content
+            if (user.role === 'admin') {
+                const adminElements = [
+                    'adminOnlyProducts',
+                    'adminOnlyOrders',
+                    'adminOnlyCustomers'
+                ];
+
+                adminElements.forEach(elementId => {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.style.display = 'block';
+                        console.log('Showed admin content for:', elementId);
+                    }
+                });
+            }
+
+            console.log('Page setup completed successfully');
+        }
+
+        // Show tab
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+                localStorage.removeItem('user');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

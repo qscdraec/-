@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - لوحة تحكم Variteks-Algérie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            border-color: #3b82f6;
+        }
+        
+        .error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(90deg, #228B22 0%, #FFD700 50%, #DC143C 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .demo-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1rem;
+        }
+        
+        .demo-title {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #6b7280;
+        }
+        
+        .demo-card {
+            background: linear-gradient(90deg, rgba(34,139,34,0.1) 0%, rgba(255,215,0,0.1) 50%, rgba(220,20,60,0.1) 100%);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .demo-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .demo-card h4 {
+            font-weight: 500;
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .demo-card p {
+            color: #6b7280;
+            margin: 0;
+        }
+        
+        .demo-credentials {
+            text-align: left;
+        }
+        
+        .demo-credentials p {
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .back-link a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .back-link a:hover {
+            color: #1d4ed8;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .loading {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">V</div>
+            <h1 class="title">لوحة تحكم Variteks-Algérie</h1>
+            <p class="subtitle">تسجيل الدخول للمشرفين والمديرين فقط</p>
+        </div>
+
+        <!-- Form -->
+        <form id="loginForm">
+            <!-- Error Message -->
+            <div id="errorMessage" class="error"></div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">اسم المستخدم</label>
+                <input type="text" id="username" placeholder="أدخل اسم المستخدم" required>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">كلمة المرور</label>
+                <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn" id="submitBtn">
+                <span id="btnText">تسجيل الدخول</span>
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <span>جاري تسجيل الدخول...</span>
+                </div>
+            </button>
+        </form>
+
+        <!-- Demo Credentials -->
+        <div class="demo-section">
+            <h3 class="demo-title">بيانات تجريبية للاختبار:</h3>
+            
+            <div class="demo-card">
+                <div class="demo-card-content">
+                    <div>
+                        <h4>مدير النظام</h4>
+                        <p>صلاحيات كاملة</p>
+                    </div>
+                    <div class="demo-credentials">
+                        <p><strong>المستخدم:</strong> admin</p>
+                        <p><strong>المرور:</strong> admin123</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-card">
+                <div class="demo-card-content">
+                    <div>
+                        <h4>مشرف المتجر</h4>
+                        <p>صلاحيات محدودة</p>
+                    </div>
+                    <div class="demo-credentials">
+                        <p><strong>المستخدم:</strong> manager</p>
+                        <p><strong>المرور:</strong> manager123</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Store -->
+        <div class="back-link">
+            <a href="/">العودة إلى المتجر</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2024 Variteks-Algérie. جميع الحقوق محفوظة.</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const existingUser = localStorage.getItem('user');
+            if (existingUser) {
+                try {
+                    const userData = JSON.parse(existingUser);
+                    console.log('Found existing user:', userData); // للتشخيص
+
+                    if (confirm('أنت مسجل دخول بالفعل كـ ' + userData.username + '. هل تريد الانتقال إلى لوحة التحكم؟')) {
+                        window.location.href = 'admin-panel.html';
+                    } else {
+                        // Clear existing session if user wants to login again
+                        localStorage.removeItem('user');
+                    }
+                } catch (error) {
+                    console.error('Error parsing existing user data:', error);
+                    localStorage.removeItem('user');
+                }
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const loading = document.getElementById('loading');
+            
+            // Hide error
+            errorDiv.style.display = 'none';
+            
+            // Show loading
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            loading.style.display = 'flex';
+            
+            // Simulate login
+            setTimeout(() => {
+                console.log('Attempting login with:', username, password); // للتشخيص
+
+                if ((username === 'admin' && password === 'admin123') ||
+                    (username === 'manager' && password === 'manager123')) {
+
+                    const userData = {
+                        username: username,
+                        role: username === 'admin' ? 'admin' : 'manager',
+                        loginTime: new Date().toISOString()
+                    };
+
+                    console.log('Login successful, saving user data:', userData);
+
+                    // Clear any existing data first
+                    localStorage.removeItem('user');
+
+                    // Save user data with multiple attempts
+                    let saveAttempts = 0;
+                    const maxSaveAttempts = 3;
+
+                    function saveUserData() {
+                        saveAttempts++;
+                        console.log(`Save attempt ${saveAttempts}`);
+
+                        try {
+                            localStorage.setItem('user', JSON.stringify(userData));
+
+                            // Verify data was saved
+                            const savedData = localStorage.getItem('user');
+                            console.log('Saved data verification:', savedData);
+
+                            if (savedData) {
+                                const parsedData = JSON.parse(savedData);
+                                if (parsedData.username === userData.username) {
+                                    console.log('Data saved and verified successfully');
+
+                                    // Show success message
+                                    btnText.textContent = 'تم بنجاح! جاري التوجيه...';
+
+                                    // Redirect after longer delay
+                                    setTimeout(() => {
+                                        console.log('Redirecting to admin panel...');
+                                        window.location.href = 'admin-panel.html';
+                                    }, 1500);
+                                    return;
+                                }
+                            }
+
+                            throw new Error('Data verification failed');
+
+                        } catch (error) {
+                            console.error('Save attempt failed:', error);
+
+                            if (saveAttempts < maxSaveAttempts) {
+                                setTimeout(saveUserData, 100);
+                            } else {
+                                alert('خطأ في حفظ بيانات تسجيل الدخول. يرجى المحاولة مرة أخرى.');
+                                // Reset button
+                                submitBtn.disabled = false;
+                                btnText.style.display = 'inline';
+                                btnText.textContent = 'تسجيل الدخول';
+                                loading.style.display = 'none';
+                            }
+                        }
+                    }
+
+                    saveUserData();
+                } else {
+                    // Show error
+                    errorDiv.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+                    errorDiv.style.display = 'block';
+                    
+                    // Reset button
+                    submitBtn.disabled = false;
+                    btnText.style.display = 'inline';
+                    loading.style.display = 'none';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
