@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر Variteks-Algérie - المتجر الإلكتروني الكامل</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="متجر Variteks-Algérie للتجارة الإلكترونية - اكتشف أفضل المنتجات بأسعار منافسة وجودة عالية">
+    <meta name="keywords" content="Variteks, الجزائر, تسوق, متجر إلكتروني, منتجات, تجارة">
+    <meta name="author" content="Variteks-Algérie">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="متجر Variteks-Algérie - تسوق أونلاين">
+    <meta property="og:description" content="اكتشف أفضل المنتجات بأسعار منافسة وجودة عالية">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'><rect width='1200' height='630' fill='%23667eea'/><text x='600' y='315' text-anchor='middle' fill='white' font-size='60' font-family='Arial'>Variteks-Algérie</text></svg>">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏪</text></svg>">
+    
+    <!-- CSS File -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="fa fa-store"></span>
+                Variteks-Algérie
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="ابحث عن المنتجات..." id="searchInput">
+            </div>
+
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="toggleCart()">
+                    <span class="fa fa-shopping-cart"></span>
+                    السلة (<span id="cartCount">0</span>)
+                </button>
+                <a href="#contact" class="btn btn-primary">
+                    <span class="fa fa-phone"></span>
+                    اتصل بنا
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3><span class="fa fa-filter"></span> تصفية المنتجات</h3>
+
+            <div class="filter-group">
+                <label for="categoryFilter">الفئة:</label>
+                <select id="categoryFilter">
+                    <option value="">جميع الفئات</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="priceMin">السعر من:</label>
+                <input type="number" id="priceMin" placeholder="0">
+            </div>
+
+            <div class="filter-group">
+                <label for="priceMax">السعر إلى:</label>
+                <input type="number" id="priceMax" placeholder="10000">
+            </div>
+
+            <div class="filter-group">
+                <label for="sortBy">ترتيب حسب:</label>
+                <select id="sortBy">
+                    <option value="name">الاسم</option>
+                    <option value="price-low">السعر: من الأقل للأعلى</option>
+                    <option value="price-high">السعر: من الأعلى للأقل</option>
+                    <option value="newest">الأحدث</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" onclick="applyFilters()" style="width: 100%; margin-top: 1rem;">
+                <span class="fa fa-search"></span>
+                تطبيق التصفية
+            </button>
+
+            <button class="btn btn-secondary" onclick="clearFilters()" style="width: 100%; margin-top: 0.5rem;">
+                <span class="fa fa-times"></span>
+                مسح التصفية
+            </button>
+        </aside>
+
+        <!-- Products Section -->
+        <section class="products-section">
+            <div class="products-header">
+                <h2><span class="fa fa-box"></span> منتجاتنا</h2>
+                <div>
+                    <span id="productsCount">0</span> منتج
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>جاري تحميل المنتجات...</p>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <span class="fa fa-box-open"></span>
+                <h3>لا توجد منتجات</h3>
+                <p>لم يتم العثور على منتجات تطابق البحث</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><span class="fa fa-shopping-cart"></span> سلة التسوق</h3>
+            <button class="btn btn-secondary" onclick="toggleCart()">
+                <span class="fa fa-times"></span>
+            </button>
+        </div>
+
+        <div class="cart-content">
+            <div id="cartItems">
+                <!-- Cart items will be loaded here -->
+            </div>
+
+            <div class="cart-total">
+                <h4>المجموع: <span id="cartTotal">0</span> دج</h4>
+            </div>
+
+            <button class="btn btn-primary" onclick="checkout()" style="width: 100%; margin-top: 1rem;">
+                <span class="fa fa-credit-card"></span>
+                إتمام الطلب
+            </button>
+
+            <button class="btn btn-secondary" onclick="clearCart()" style="width: 100%; margin-top: 0.5rem;">
+                <span class="fa fa-trash"></span>
+                مسح السلة
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2><span class="fa fa-cog"></span> لوحة التحكم</h2>
+                <button class="btn btn-danger" onclick="closeAdminPanel()">
+                    <span class="fa fa-times"></span>
+                </button>
+            </div>
+
+            <form id="productForm">
+                <h3><span class="fa fa-plus"></span> إضافة منتج جديد</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName">اسم المنتج:</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">الفئة:</label>
+                        <select id="productCategory" required>
+                            <option value="">اختر الفئة</option>
+                            <option value="إلكترونيات">إلكترونيات</option>
+                            <option value="إكسسوارات">إكسسوارات</option>
+                            <option value="كاميرات">كاميرات</option>
+                            <option value="ملابس">ملابس</option>
+                            <option value="منزل وحديقة">منزل وحديقة</option>
+                            <option value="رياضة">رياضة</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription">الوصف:</label>
+                    <textarea id="productDescription" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">السعر (دج):</label>
+                        <input type="number" id="productPrice" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productStock">الكمية المتوفرة:</label>
+                        <input type="number" id="productStock" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">رابط الصورة:</label>
+                    <input type="url" id="productImage" placeholder="https://example.com/image.jpg">
+                </div>
+
+                <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 1rem;">
+                    <span class="fa fa-save"></span>
+                    حفظ المنتج
+                </button>
+            </form>
+
+            <div style="margin-top: 2rem;">
+                <h3><span class="fa fa-box"></span> المنتجات الحالية (<span id="adminProductsCount">0</span>)</h3>
+                <div id="adminProductsList" style="max-height: 300px; overflow-y: auto; margin-top: 1rem;">
+                    <!-- Admin products list will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <!-- معلومات المتجر -->
+            <div class="footer-section">
+                <h3>متجر Variteks-Algérie</h3>
+                <p>متجرك الموثوق للتجارة الإلكترونية في الجزائر. نقدم أفضل المنتجات بأسعار منافسة وجودة عالية.</p>
+                <div style="margin-top: 1rem;">
+                    <p><span class="fa fa-phone"></span> +213 XXX XXX XXX</p>
+                    <p><span class="fa fa-envelope"></span> info@variteks-algerie.com</p>
+                    <p><span class="fa fa-map-marker-alt"></span> الجزائر العاصمة، الجزائر</p>
+                </div>
+            </div>
+
+            <!-- روابط سريعة -->
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul>
+                    <li><a href="#"><span class="fa fa-home"></span> الصفحة الرئيسية</a></li>
+                    <li><a href="#"><span class="fa fa-info-circle"></span> من نحن</a></li>
+                    <li><a href="#"><span class="fa fa-shipping-fast"></span> الشحن والتوصيل</a></li>
+                    <li><a href="#"><span class="fa fa-undo-alt"></span> سياسة الإرجاع</a></li>
+                    <li><a href="#"><span class="fa fa-headset"></span> خدمة العملاء</a></li>
+                </ul>
+            </div>
+
+            <!-- وسائل التواصل -->
+            <div class="footer-section">
+                <h3>تابعنا</h3>
+                <div class="social-links">
+                    <a href="#" title="Facebook"><span class="fa fa-facebook"></span></a>
+                    <a href="#" title="Instagram"><span class="fa fa-instagram"></span></a>
+                    <a href="#" title="WhatsApp"><span class="fa fa-whatsapp"></span></a>
+                    <a href="#" title="Telegram"><span class="fa fa-telegram"></span></a>
+                </div>
+                <p style="margin-top: 1rem;">تابعنا على وسائل التواصل الاجتماعي للحصول على آخر العروض والمنتجات الجديدة.</p>
+            </div>
+
+            <!-- ساعات العمل -->
+            <div class="footer-section">
+                <h3>ساعات العمل</h3>
+                <p><strong>السبت - الخميس:</strong> 9:00 - 18:00</p>
+                <p><strong>الجمعة:</strong> 14:00 - 18:00</p>
+                <p><strong>خدمة العملاء:</strong> 24/7</p>
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,215,0,0.1); border-radius: 8px; border-right: 3px solid var(--accent-color);">
+                    <span class="fa fa-truck" style="color: var(--accent-color);"></span>
+                    <strong>توصيل مجاني</strong> للطلبات أكثر من 5000 دج
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 متجر Variteks-Algérie. جميع الحقوق محفوظة.</p>
+            <p style="margin-top: 0.5rem;">
+                تم التطوير بواسطة <span style="color: var(--accent-color);">Augment Agent</span> |
+                <a href="#">سياسة الخصوصية</a> |
+                <a href="#">الشروط والأحكام</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Admin Panel Button -->
+    <button class="admin-panel-btn" onclick="openAdminPanel()" title="لوحة التحكم">
+        <span class="fa fa-cog"></span>
+    </button>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <!-- معلومات المتجر -->
+            <div class="footer-section">
+                <h3>متجر Variteks-Algérie</h3>
+                <p>متجرك الموثوق للتجارة الإلكترونية في الجزائر. نقدم أفضل المنتجات بأسعار منافسة وجودة عالية.</p>
+                <div style="margin-top: 1rem;">
+                    <p><span class="fa fa-phone"></span> +213 XXX XXX XXX</p>
+                    <p><span class="fa fa-envelope"></span> info@variteks-algerie.com</p>
+                    <p><span class="fa fa-map-marker-alt"></span> الجزائر العاصمة، الجزائر</p>
+                </div>
+            </div>
+
+            <!-- روابط سريعة -->
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul>
+                    <li><a href="#"><span class="fa fa-home"></span> الصفحة الرئيسية</a></li>
+                    <li><a href="#"><span class="fa fa-info-circle"></span> من نحن</a></li>
+                    <li><a href="#"><span class="fa fa-shipping-fast"></span> الشحن والتوصيل</a></li>
+                    <li><a href="#"><span class="fa fa-undo-alt"></span> سياسة الإرجاع</a></li>
+                    <li><a href="#"><span class="fa fa-headset"></span> خدمة العملاء</a></li>
+                </ul>
+            </div>
+
+            <!-- وسائل التواصل -->
+            <div class="footer-section">
+                <h3>تابعنا</h3>
+                <div class="social-links">
+                    <a href="#" title="Facebook"><span class="fa fa-facebook"></span></a>
+                    <a href="#" title="Instagram"><span class="fa fa-instagram"></span></a>
+                    <a href="#" title="WhatsApp"><span class="fa fa-whatsapp"></span></a>
+                    <a href="#" title="Telegram"><span class="fa fa-telegram"></span></a>
+                </div>
+                <p style="margin-top: 1rem;">تابعنا على وسائل التواصل الاجتماعي للحصول على آخر العروض والمنتجات الجديدة.</p>
+            </div>
+
+            <!-- ساعات العمل -->
+            <div class="footer-section">
+                <h3>ساعات العمل</h3>
+                <p><strong>السبت - الخميس:</strong> 9:00 - 18:00</p>
+                <p><strong>الجمعة:</strong> 14:00 - 18:00</p>
+                <p><strong>خدمة العملاء:</strong> 24/7</p>
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,215,0,0.1); border-radius: 8px; border-right: 3px solid var(--accent-color);">
+                    <span class="fa fa-truck" style="color: var(--accent-color);"></span>
+                    <strong>توصيل مجاني</strong> للطلبات أكثر من 5000 دج
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 متجر Variteks-Algérie. جميع الحقوق محفوظة.</p>
+            <p style="margin-top: 0.5rem;">
+                تم التطوير بواسطة <span style="color: var(--accent-color);">Augment Agent</span> |
+                <a href="#">سياسة الخصوصية</a> |
+                <a href="#">الشروط والأحكام</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Admin Panel Button -->
+    <button class="admin-panel-btn" onclick="openAdminPanel()" title="لوحة التحكم">
+        <span class="fa fa-cog"></span>
+    </button>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- JavaScript File -->
+    <script src="main.js"></script>
+</body>
+</html>
